@@ -18,8 +18,16 @@
             (e.g., "FPL" is mapped "Forest Products Laboratory"</xd:p>
             <xd:p>The purpose is to provide more meaningful search results to researchers.</xd:p>     
         </xd:desc>
+        <xd:param name="arg"/>
     </xd:doc>    
     
+    <!-- non-naming functions -->
+    
+   <xsl:function name="local:escape-for-regex" as="xs:string"
+        xmlns:functx="http://local_functions">
+        <xsl:param name="arg" as="xs:string?"/>
+        <xsl:sequence select="replace($arg,'(\.|\[|\]|\\|\||\-|\^|\$|\?|\*|\+|\{|\}|\(|\))','\\$1')"/>
+    </xsl:function>
     <!--Global Variables-->
     <xsl:variable name="seriesTitle" select="('Forest Insect &amp; Disease Leaflet', 'General Technical Report (GTR)',
         'General Technical Report - Proceedings', 'Information Forestry', 'Proceeding (Rocky Mountain Research Station Publications)',

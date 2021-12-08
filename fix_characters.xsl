@@ -5,13 +5,13 @@
     xmlns="http://www.loc.gov/mods/v3"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:xlink="http://www.w3.org/1999/xlink" 
-    exclude-result-prefixes="fn xlink"
-    >
+    exclude-result-prefixes="fn xlink">
+    
     <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="text/xml"/>
     <xsl:strip-space elements="*"/>
     
-    <xsl:template match="/">
-        <xsl:result-document method="xml" encoding="UTF-8" indent="yes" href="file:///{//*:workingDirectory}N-{replace(//*:originalFile, '(.*/)(.*)(\.xml)', '$2')}_{position()}.xml">
+    <xsl:template match="root">
+        <xsl:result-document method="xml" encoding="UTF-8" indent="yes" href="file:///{//*:workingDirectory}N-{//*:originalFile}_{position()}.json">
             <mods version="3.7">
                 <xsl:namespace name="xlink">http://www.w3.org/1999/xlink</xsl:namespace>
                 <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
@@ -21,7 +21,6 @@
                 </xsl:for-each>
             </mods>
         </xsl:result-document>
-        
     </xsl:template>
     
     
@@ -105,9 +104,8 @@
         <xsl:variable name="work" select="fn:replace( $work, 'Ã¥', 'å')"/> <!--  -->
         <xsl:variable name="work" select="fn:replace( $work, 'Ã¸', 'ø')"/> <!--  -->
         <xsl:variable name="work" select="fn:replace( $work, 'Ã&#x87;', 'Ç')"/> <!--  -->
-        
-        
-        
+
+
         <xsl:variable name="work" select="fn:replace( $work, 'Ä±', 'ı')"/>  <!-- \xC4 \xB1 -->       
         <xsl:variable name="work" select="fn:replace( $work, 'Ä', 'ć')"/>  <!-- \xC4 \x87 -->
         <xsl:variable name="work" select="fn:replace( $work, 'Ä', 'ą')"/>  <!-- \xC4 \x85 -->
@@ -124,8 +122,7 @@
         <xsl:variable name="work" select="fn:replace( $work, 'Å&#x91;', 'ő')"/>
         <xsl:variable name="work" select="fn:replace( $work, 'Å¡', 'š')"/>
         <xsl:variable name="work" select="fn:replace( $work, 'Å&#x93;', 'œ')"/>
-        
-        
+                
         <xsl:variable name="work" select="fn:replace( $work, 'Ã&#x9f;', '.')"/>
         
         <xsl:variable name="work" select="fn:replace( $work, 'Î¼', 'μ')"/>  <!-- \xCE \xBC -->       

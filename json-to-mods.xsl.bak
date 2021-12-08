@@ -16,15 +16,14 @@
     exclude-result-prefixes="f fn math mods saxon local usfs xd xs xsi">
 
     <!--output-->
-    <xsl:output method="json" indent="yes" encoding="UTF-8" name="archive"/>
-    <xsl:output method="xml" indent="yes" encoding="UTF-8" name="original"/>
-    <!-- saxon:next-in-chain="fix_characters.xsl"/>-->
+    <xsl:output method="json" indent="yes" encoding="UTF-8" name="archive" />
+    <xsl:output method="xml" indent="yes" encoding="UTF-8" saxon:next-in-chain="fix_characters.xsl"/>
 
     <!--includes-->
     <xsl:include href="commons/common.xsl"/>
     <xsl:include href="commons/functions.xsl"/>
     <xsl:include href="commons/usfs_naming_functions.xsl"/>
-    <xsl:include href="commons/params-cm.xsl"/>
+    <xsl:include href="commons/params.xsl"/>
 
 
     <!--white space control-->
@@ -43,7 +42,7 @@
     </xd:doc>
 
 
-    <!--Root template for local testing-->
+    <!--Root template for local testing
     <xd:doc>
         <xd:desc>
             <xd:p>
@@ -68,12 +67,12 @@
     <xsl:template match="data">
         <data>
             <xsl:result-document method="xml" omit-xml-declaration="yes"
-                href="{$working_dir}A-{$original_filename}_{position()}.json" format="archive">
+                href="{$working_dir}/archive-files/A-{$original_filename}_{position()}.json" format="archive">
                 <xsl:value-of disable-output-escaping="yes" select="."/>
             </xsl:result-document>
         </data>
         <xsl:result-document method="xml" indent="yes" encoding="UTF-8" media-type="text/xml"
-            format="original" href="{$working_dir}N-{$original_filename}_{position()}.xml">
+            format="original" href="{$working_dir}/mods-files/N-{$original_filename}_{position()}.xml">
             <mods version="3.7">
                 <xsl:attribute name="{'xmlns'}">http://www.loc.gov/mods/v3</xsl:attribute>
                 <xsl:namespace name="xlink">http://www.w3.org/1999/xlink</xsl:namespace>
@@ -83,7 +82,7 @@
                 <xsl:apply-templates select="json-to-xml(.)"/>
             </mods>
         </xsl:result-document>
-    </xsl:template>
+    </xsl:template>-->
 
 
     <xd:doc>
@@ -92,22 +91,22 @@
                 on the server or putting into production</xd:p>
         </xd:desc>
     </xd:doc>
-    <!-- <xsl:template match="data">
-        <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
-            href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.json)','$2')}_{position()}.json" format="archive">
-            <xsl:copy-of select="."/>
-        </xsl:result-document>
-        <xsl:result-document method="xml" indent="yes" encoding="UTF-8" media-type="text/xml"
-            href="file:///{$workingDir}N-{replace($originalFilename, '(.*/)(.*)(\.json)','$2')}_{position()}.xml">
-        <mods version="3.7">
-            <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
-            <xsl:attribute name="xsi:schemaLocation">http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd</xsl:attribute>
-                <xsl:apply-templates select="json-to-xml(.)"/>
-            </mods>
-        </xsl:result-document>
-    </xsl:template>-->
+     <xsl:template match="data">
+         <data>
+             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
+                 href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json" format="archive">
+                 <xsl:value-of disable-output-escaping="yes" select="."/>
+             </xsl:result-document>
+         </data>
 
-
+             <mods version="3.7">
+                 <xsl:attribute name="{'xmlns'}">http://www.loc.gov/mods/v3</xsl:attribute>
+                 <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
+                 <xsl:attribute name="xsi:schemaLocation">http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd</xsl:attribute>
+                 <xsl:apply-templates select="json-to-xml(.)"/>
+             </mods>
+        
+     </xsl:template>
 
     <xd:doc>
         <xd:desc>
@@ -567,7 +566,7 @@
                             </end>
                             <xsl:if test="contains(string[@key = 'pub_page'], 's')"/>
                             <xsl:variable name="translated_total"
-                                select="translate(string[@key = 'pub_page'], '[s]', '')"/>
+                                select="translate(string[@key = 'pub_page'], 's', '')"/>
                             <total>
                                 <xsl:value-of
                                     select="f:calculateTotalPgs(substring-before($translated_total, '-'), substring-after($translated_total, '-'))"
@@ -841,40 +840,7 @@
         </xsl:choose>
         
     </xsl:template>
-    
-    <!--SPECIAL CASES-->
-    <xd:doc>
-        <xd:desc>
-            <xd:p>outlier case page numbers</xd:p>
-        </xd:desc>
-        <xd:param name="citation"/>
-    </xd:doc>
-    <xsl:template match="/fn:map/fn:string[@key = 'citation']" mode="special_cases" xpath-default-namespace="http://www.w3.org/2005/xpath-functions"
-        name="special_cases">
-        <xsl:param name="citation"/>
-        <xsl:variable name="lastNumber" select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last()])"/>
-        <xsl:variable name="secondToLastNumber" select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>
-        <xsl:choose>
-            <xsl:when test="matches($citation, '[^\d+](\d+\sp)')">
-              <!--  <xsl:comment>subtest 3.b.iv</xsl:comment>-->
-                <total>
-                    <xsl:value-of select="$lastNumber"/>
-                </total>
-            </xsl:when>
-            <xsl:when test="matches($citation, '[A-z]\d+-[A-z]\d+')">
-            <!-- <xsl:text>subtest3.b.iii</xsl:text> -->
-                <start>
-                    <xsl:value-of select="$secondToLastNumber"/>
-                </start>
-                <end>
-                    <xsl:value-of select="$lastNumber"/>
-                </end>
-                <total>
-                    <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
-                </total>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:template>
+
     
     <!--TOTAL_ONLY-->
     <xd:doc>
@@ -1079,20 +1045,6 @@
             <workingDirectory>
                 <xsl:value-of select="$workingDir"/>
             </workingDirectory>
-            <xsl:comment>values of new global variables</xsl:comment>
-            <xslt_document>
-                <xsl:variable name="xsltdoc" select="document-uri(document(''))"/>
-                <xsl:value-of select="$xsltdoc"/>
-            </xslt_document>
-            <archive_file>
-                <xsl:value-of select="$archive_file"/>
-            </archive_file>
-            <original_file>
-                <xsl:value-of select="$original_filename"/>
-            </original_file>
-            <working_directory>
-                <xsl:value-of select="$working_dir"/>
-            </working_directory>
         </extension>
     </xsl:template>
 </xsl:stylesheet>
