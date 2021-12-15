@@ -21,8 +21,9 @@ The _[json_to_mods.xsl](https://github.com/CarlosMtz3/json-to-xml/blob/master/js
 
  ## Preparing JSON Files for XSLT Transformation
 
-1. **Download and unzip the file** to 
-(e.g., C:\users\\*{your-profile-name}*\\desktop\". Ope n *"json-to-mods"* file folder.
+1. **Download and unzip the file** to a local directory. 
+(e.g., "C:\users\\*{your-profile-name}*\\Desktop\". 
+2. **Open *"json-to-mods"* file folder.**
 3.  **Locate the *"working_directory"***. 
 	 Open it.
 4. **Locate three shell scripts** 
@@ -182,5 +183,5 @@ This issue can be resolved if the shell script is improved to handle preprocess 
 - `<br>` &rarr; `<br/>`
 - 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwNzE3MDExNjIsNTY2MTQ2MTE2XX0=
+eyJoaXN0b3J5IjpbLTEwNjQxOTY3LDU2NjE0NjExNl19
 -->
