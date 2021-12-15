@@ -27,7 +27,7 @@ The _[json_to_mods.xsl](https://github.com/CarlosMtz3/json-to-xml/blob/master/js
 3.  **Locate the *"working_directory"***. 
 	 Open it.
 4. **Locate three shell scripts** 
-*- These will be run at different times througout the **prepartion** and **procedure**.*
+*- These will be run at different times throughout the **preparation** and **procedure**.*
  - *Shell Scripts List*
 	-  (a) [merge_json.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/working-directory/merge-json.sh) - merges all *.json files within this directory. This is useful for creating  a merged view of the json data for analysis. **Run this file first**
 	-  (b) [merge_xml.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/working-directory/merge-xml.sh) - merges all *.xml files contained within this directory. This is useful after transformation because it is easier to check if a specific element is available in every file.  **Run this file last**
@@ -183,5 +183,6 @@ This issue can be resolved if the shell script is improved to handle preprocess 
 - `<br>` &rarr; `<br/>`
 - 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNjQxOTY3LDU2NjE0NjExNl19
+eyJoaXN0b3J5IjpbMzMzMzU5ODk0LC0xMDY0MTk2Nyw1NjYxND
+YxMTZdfQ==
 -->
