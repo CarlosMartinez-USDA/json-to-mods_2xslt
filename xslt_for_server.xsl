@@ -342,7 +342,7 @@
     </xsl:template>
 
     
-<!-- controlled vocacbulary -->
+<!-- controlled vocabulary -->
     <xd:doc>
         <xd:desc>The national research taxonomy elements are the preferred controlled vocabulary
             chosen for inclusion in subject/topic MODS metadata. </xd:desc>
@@ -482,14 +482,34 @@
     <!-- pages -->
    <xd:doc>
         <xd:desc>
-            <xd:p>Matches "pub_page_start" and "pub_page_end" stiing key values</xd:p>
-            <xd:p>If not, looks for a hyphenated value within the "pub_page" field, and performs the
-                math</xd:p>
-            <xd:p>When none of these fields used, no page numbers appear within the output</xd:p>
-            <xd:p>Below a commmented out template runs through six conditions in an attempt to
-                capture fields</xd:p>
-            <xd:p>If all page numbers are desired, the citation field or th e</xd:p>
-            <xd:p>Test 1: Special case for page numbers starting with "S" (maybe obsolete)</xd:p>
+            <xd:p><xd:b>Named template: Pages</xd:b></xd:p>
+            <xd:p>Runs through a series of conditional statements to accurately choose the corresponding page number information for each record.</xd:p> 
+            <xd:p>Conditional Statements appear run in the following order:</xd:p>
+            <xd:ul>
+                <xd:li>
+                    <xd:p>(1) Begins by trying to match on "pub_page_start" and "pub_page_end" json string key values</xd:p>
+                </xd:li>
+                <xd:li>
+                    <xd:p>(2) When neither field is present, attempts to match the a hyphenated value within the "pub_page" field.</xd:p>
+                </xd:li>
+                 <xd:ul>
+                        <xd:li>
+                            <xd:p>(a) This test is subdivided in two parts the first tests for page numbers containing alphanumeric combinations
+                                (e.g., s125-s129)</xd:p>
+                        </xd:li>
+                         <xd:li>
+                              <xd:p>(b) the second subtest uses the analyze-string function to locate a hyphenated value within the json string of the "pub_page" field</xd:p>
+                        </xd:li>
+                </xd:ul>
+                <xd:li>
+                    <xd:p>(3) Test main: The third test is performs the analyze-string function on the citation field.</xd:p>
+                    <xd:p>Every page condition included within the sample set is considered within the regex</xd:p>
+                    <xd:p>The result of this test render one-hundred percent accuracy for all records contaiting page numbers within the citaiton field</xd:p>
+                </xd:li>
+                <xd:li>
+                    <xd:p>(Review) The rest of the tests and citaition templates should be reviewed for functionality and removed if found to be unnecessary</xd:p>
+                </xd:li>               
+            </xd:ul>
         </xd:desc>
         <xd:param name="start_page"/>
         <xd:param name="end_page"/>
@@ -499,7 +519,6 @@
         <xsl:param name="start_page" select="/fn:map/fn:string[@key = 'pub_page_start']"/>
         <xsl:param name="end_page" select="/fn:map/fn:string[@key = 'pub_page_end']"/>
         <xsl:param name="citation" select="/fn:map/fn:string[@key = 'citation']"/>
-  
         <xsl:choose>
             <xsl:when test="$start_page and $end_page">
                   <xsl:sequence>
@@ -527,14 +546,11 @@
                             <xsl:variable name="translated_total"
                                 select="translate(string[@key = 'pub_page'], '[s]', '')"/>
                             <total>
-                                <xsl:value-of
-                                    select="f:calculateTotalPgs(substring-before($translated_total, '-'), substring-after($translated_total, '-'))"
-                                />
+                                <xsl:value-of select="f:calculateTotalPgs(substring-before($translated_total, '-'), substring-after($translated_total, '-'))"/>
                             </total>
                     </xsl:when>
                     <xsl:when test="contains(/map/string[@key = 'pub_page'], '-')">
-                        <xsl:analyze-string select="/map/string[@key = 'pub_page']"
-                            regex="(\d+)(\-\d+)?">
+                        <xsl:analyze-string select="/map/string[@key = 'pub_page']" regex="(\d+)(\-\d+)?">
                             <xsl:matching-substring>
                                 <xsl:choose>
                                     <xsl:when test="regex-group(1) and regex-group(2)">
@@ -547,9 +563,7 @@
                                             <xsl:number value="$substring"/>
                                         </end>
                                         <total>
-                                            <xsl:value-of
-                                                select="f:calculateTotalPgs(number(regex-group(1)), number($substring))"
-                                            />
+                                            <xsl:value-of select="f:calculateTotalPgs(number(regex-group(1)), number($substring))"/>
                                         </total>
                                     </xsl:when>
                                 </xsl:choose>
@@ -596,12 +610,12 @@
                             </xsl:when>
                             <xsl:when test="regex-group(7) and not(regex-group(8))">
                                 <total>
-                                    <xsl:value-of select="regex-group(7)"/>
+                                    <xsl:value-of select="replace(regex-group(7),'(\[)(\d+)(\])','$2')"/>
                                 </total>
                              </xsl:when>
                             <xsl:when test="regex-group(7) and not(regex-group(8))">
                                 <total>
-                                    <xsl:value-of select="regex-group(7)"/>
+                                    <xsl:value-of select="replace(regex-group(7),'(\[)(\d+)(\])','$2')"/>
                                 </total>                              
                             </xsl:when>                            
                             <xsl:when test="regex-group(7) and (regex-group(8))">
@@ -623,7 +637,6 @@
                         <xsl:variable name="secondToLastNumber" select="string(tokenize($citation, '[^\d]+')[.][last() - 1])"/>
                         <xsl:choose>
                             <xsl:when test="matches($citation, '(\d+-\d+)')">
-                                <!--  <xsl:comment>test 3b.</xsl:comment> -->
                                 <start>
                                     <xsl:value-of select="$secondToLastNumber"/>
                                 </start>
@@ -633,7 +646,6 @@
                                 <total>
                                     <xsl:value-of select="f:calculateTotalPgs( $secondToLastNumber, $lastNumber)"/>
                                 </total>
-                                <!--  <xsl:comment>test 3.b.i</xsl:comment> -->
                             </xsl:when>
                             <xsl:when test="matches($citation, '(\d+\sp)')">
                                 <total>
@@ -643,22 +655,18 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:apply-templates select="$citation" mode="special_cases"/>
-                                <!--  <xsl:comment>test 3.b.iii</xsl:comment> -->
                             </xsl:otherwise>
                         </xsl:choose>
                         </xsl:if>
-                    </xsl:non-matching-substring>
-                    
+                    </xsl:non-matching-substring>                    
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:when test="/map/string[@key = 'citation']">
-                <xsl:comment>test 3b: citation field, 2nd iteration </xsl:comment>
                 <xsl:analyze-string select="$citation"
                     regex="[^\d](\d+)(-\d+)?(\sp|\sp$)|(pages\s|Pages\s|:\s|p\.\s)(\d+-\d+)">
                     <xsl:matching-substring>
                         <xsl:choose>
                             <xsl:when test="regex-group(1) and not(regex-group(2))">
-                                <xsl:comment>subtest 3.b.i</xsl:comment>
                                 <total>
                                     <xsl:value-of select="regex-group(1)"/>
                                 </total>
@@ -678,7 +686,6 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:if test="regex-group(5)">
-                                    <xsl:comment>subtest 3.b.ii</xsl:comment>
                                     <start>
                                         <xsl:value-of select="substring-before(regex-group(5), '-')"
                                         />
@@ -743,9 +750,6 @@
                     <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                 </total>
             </xsl:when>
-            <!--  <xsl:otherwise>
-               <xsl:call-template name="start_end_total"/>
-           </xsl:otherwise>-->
         </xsl:choose>
     </xsl:template>
     
@@ -761,7 +765,6 @@
         <xsl:variable name="secondToLastNumber" select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>
         <xsl:choose>
             <xsl:when test="matches($citation, '(\d+-\d+)')">
-                <xsl:comment>subtest3.2</xsl:comment>
                 <start>
                     <xsl:value-of select="$secondToLastNumber"/>
                 </start>
@@ -773,14 +776,12 @@
                 </total>
             </xsl:when>
             <xsl:when test="matches($citation, '(\d+\sp)')">
-                <xsl:comment>subtest 2c</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
             </xsl:when>
            <xsl:otherwise>
-                <xsl:apply-templates select="/fn:map/fn:string[@key = 'citation']" mode="total_only"
-                />
+                <xsl:apply-templates select="/fn:map/fn:string[@key = 'citation']" mode="total_only"/>
             </xsl:otherwise>
         </xsl:choose>        
     </xsl:template>
@@ -799,10 +800,9 @@
             select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>
         <xsl:choose>
             <xsl:when test="matches($citation, '[^\d+](\d+\sp)')">
-                <xsl:comment>subtest 2d</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
-                </total>
+                </total>                                  
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -832,35 +832,28 @@
     <xsl:template match="/fn:map/fn:string[@key = 'citation']" mode="special_cases" xpath-default-namespace="http://www.w3.org/2005/xpath-functions"
         name="special_cases">
         <xsl:param name="citation"/>       
-        <xsl:variable name="lastNumber"
-            select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last()])"/>
-        <xsl:variable name="secondToLastNumber"
-            select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>        
+        <xsl:variable name="lastNumber" select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last()])"/>
+        <xsl:variable name="secondToLastNumber" select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>        
         <xsl:choose>
             <xsl:when test="$lastNumber and $secondToLastNumber">
                 <xsl:if test="matches($citation, 'R\d+-R\d+')">
-                    <xsl:text>subtest3.b.iii</xsl:text>
                     <start>
                         <xsl:value-of select="$secondToLastNumber"/>
                     </start>
                     <end>
                         <xsl:value-of select="$lastNumber"/>
-                        <!--xsl:value-of select="replace(.,concat('^(.*)',$number[last()],'.*'),'$1')"/>-->
                     </end>
                     <total>
-                        <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
-                        />
+                        <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                     </total>
                 </xsl:if>
             </xsl:when>
             <xsl:when test="matches($citation, '[^\d+](\d+\sp)')">
-                <xsl:comment>subtest 3.b.iv</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
             </xsl:when>
         </xsl:choose>
-        
     </xsl:template>
 
     <xd:doc>
