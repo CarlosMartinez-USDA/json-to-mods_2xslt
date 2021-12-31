@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      version="3.7"
+      xmlns="http://www.loc.gov/mods/v3"
+      xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd">
+   <titleInfo>
+      <title>Advanced wood- and bio-composites : enhanced performance and sustainability</title>
+   </titleInfo>
+   <name type="personal" usage="primary">
+      <namePart type="given">Jerrold E.</namePart>
+      <namePart type="family">Winandy</namePart>
+      <displayForm>Winandy, Jerrold E.</displayForm>
+      <affiliation>United States Department of Agriculture, Forest Service, Forest Products Laboratory, Engineered Composites Sciences, One Gifford Pinchot Drive, Madison, WI 53726</affiliation>
+      <role>
+         <roleTerm type="text">author</roleTerm>
+      </role>
+   </name>
+   <typeOfResource>text</typeOfResource>
+   <genre>article</genre>
+   <originInfo>
+      <dateIssued encoding="w3cdtf" keyDate="yes">2008-03-27</dateIssued>
+   </originInfo>
+   <note type="treesearch-status">Informally Refereed (Peer-Reviewed)</note>
+   <language>
+      <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
+      <languageTerm type="text">English</languageTerm>
+   </language>
+   <abstract>Use of wood-based-composites technology to create value-added commodities and traditional construction materials is generally accepted worldwide. Engineered wood- and lignocellulosic-composite technologies allow users to add considerable value to a diverse number of wood- and lignocellulosic feedstocks including small-diameter timber, fast plantation-grown timber, agricultural fibre and lignocellulosic residues, exotic-invasive species, recycled lumber, and timber removals of hazardous forest-fuels. Another potential advantage of this type of economic- and materials-development scenario is that developing industrial composite processing technologies will provide producers an ability to use, and to adapt with, an ever-changing quality level of wood and/or other natural lignocellulosic feedstocks. However, the current level of performance of our state-of-the-art engineered composite products sometimes limit broader application into commercial, non-residential and industrial construction markets because of both real and perceived issues related to fire, structural-performance, and service-life. The worldwide research community has recognized this and is currently addressing each of these issues. From a performance standpoint, this developing knowledge has already and will continue to provide the fundamental understanding required to manufacture advanced engineered composites. From a manufacturing and a resource sustainability standpoint, with this evolving fundamental understanding of the relationships between materials, processes, and composite performance properties we now can in some cases, or may soon be able to, recognize the attributes and quality of an array of bio-based materials then adjust the composite manufacturing process to produce high-performance composite products. As this fundamental understanding is developed, we will increasingly be able to produce advanced, high-performance wood- and bio-composites. Then we must use those technologies as tools to help forest and land managers fund efforts to restore damaged eco-systems and which in turn may further promote sustainable forest management practices.</abstract>
+   <subject>
+      <topic>Renewable natural resources</topic>
+   </subject>
+   <subject>
+      <topic>value added</topic>
+   </subject>
+   <subject>
+      <topic>engineered wood</topic>
+   </subject>
+   <subject>
+      <topic>sustainable forestry</topic>
+   </subject>
+   <subject>
+      <topic>economic aspects</topic>
+   </subject>
+   <subject>
+      <topic>composite materials</topic>
+   </subject>
+   <subject>
+      <topic>forest resources</topic>
+   </subject>
+   <subject>
+      <topic>biocomposites</topic>
+   </subject>
+   <subject>
+      <topic>wood technology</topic>
+   </subject>
+   <relatedItem type="host">
+      <titleInfo>
+         <title>Advanced Materials and Processing IV : selected, peer reviewed papers presented at the 4th International Conference on Advanced Materials and Processing, 10-13 December, 2006, Hamilton, New Zealand</title>
+      </titleInfo>
+      <part>
+         <text type="year">2008</text>
+         <text type="month">03</text>
+         <text type="day">27</text>
+         <extent unit="pages">
+            <start>9</start>
+            <end>14</end>
+            <total>6</total>
+         </extent>
+      </part>
+   </relatedItem>
+   <identifier type="treesearch">2284</identifier>
+   <identifier type="treesearch-pub">29175</identifier>
+   <location>
+      <url displayLabel="Direct access to publisher’s site">https://www.fs.usda.gov/treesearch/pubs/29175</url>
+   </location>
+   <location>
+      <url displayLabel="Full Text in PDF">https://www.fpl.fs.fed.us/documnts/pdf2006/fpl_2006_winandy002.pdf</url>
+   </location>
+   <accessCondition type="use and reproduction" displayLabel="Resource is Open Access">
+      <program xmlns="https://data.crossref.org/schemas/AccessIndicators.xsd">
+         <license_ref>http://purl.org/eprint/accessRights/OpenAccess</license_ref>
+      </program>
+   </accessCondition>
+   <extension>
+      <vendorName>United States. Forest service</vendorName>
+      <originalFile>file:/C:/Users/carlos.martinez/Downloads/Chrome-downloads/json-to-mods_2xslt-master/workingDir-12-15-2021/A-29175.json</originalFile>
+      <workingDirectory>C:/Users/carlos.martinez/Desktop/json-to-mods_2xslt/workingCopy/</workingDirectory>
+      <xslt_document>file:/C:/Users/carlos.martinez/Downloads/Chrome-downloads/json-to-mods_2xslt-master/xslt_for_server.xsl</xslt_document>
+   </extension>
+</mods>

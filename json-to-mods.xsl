@@ -96,7 +96,7 @@
             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
                 href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
-                <xsl:value-of disable-output-escaping="yes" select="local:escape-for-regex(.)"/>
+                <xsl:value-of disable-output-escaping="yes" select="."/>
             </xsl:result-document>
         </data>
         <xsl:result-document indent="yes" encoding="UTF-8" method="xml" 
@@ -133,7 +133,8 @@
         <genre>article</genre>
 
         <!--originInfo/dateIssued-->
-        <xsl:apply-templates select="./string[@key = 'modified_on']" mode="origin"/>
+<!--        <xsl:call-template name="dateIssued"/>-->
+        <xsl:apply-templates select="map/string[@key = 'modified_on'] | map/string[@key = 'created_on']" mode="origin"/>
 
         <!-- note-->
         <xsl:apply-templates select="./string[@key = 'status_name']"/>
@@ -146,9 +147,6 @@
 
         <!--abstract-->
         <xsl:apply-templates select="./string[@key = 'abstract']"/>
-
-        <!--citation-->
-        <xsl:apply-templates select="map/string[@key = 'citation']"/>
 
         <!--subject/topic-->
         <xsl:call-template name="keywords"/>
@@ -286,17 +284,17 @@
         </role>
     </xsl:template>
 
-    <!-- originInfo -->
+    <!-- dateIssued -->
     <xd:doc>
-        <xd:desc>Transforms, in order of preference, the publication-related date metadata</xd:desc>
+        <xd:desc><xd:p>Chooses dateIssued mods element from one of three dates</xd:p></xd:desc>
     </xd:doc>
     <xsl:template name="dateIssued" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <xsl:choose>
-            <xsl:when test="map/string[@key = 'modified_on']">
-                <xsl:apply-templates select="map/string[@key = 'modified_on']"/>
+            <xsl:when test="map/string[@key = 'modified_on'] and . != 'null'">
+                <xsl:apply-templates select="map/string[@key = 'modified_on']" mode="origin"/>
             </xsl:when>
             <xsl:when test="map/string[@key = 'created_on']">
-                <xsl:apply-templates select="map/string[@key = 'created_on']"/>
+                <xsl:apply-templates select="map/string[@key = 'created_on']" mode="origin"/>
             </xsl:when>
             <xsl:otherwise>
                 <originInfo>
@@ -308,7 +306,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <!-- dateIssued -->
+    
     <xd:doc>
         <xd:desc/>
         <xd:param name="input"/>
@@ -317,6 +315,8 @@
         xpath-default-namespace="http://www.w3.org/2005/xpath-functions" mode="origin">
         <xsl:param name="input" select="."/>
         <originInfo>
+            <xsl:choose>
+            <xsl:when test="map/string[@key='modified_on'] and (. !='null' or '')">
             <dateIssued encoding="w3cdtf" keyDate="yes">
                 <!-- Define array of months -->
                 <xsl:variable name="months"
@@ -333,10 +333,36 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </dateIssued>
+            </xsl:when>
+                <xsl:when test="map/string[@key='created_on'] and (. !='null' or '')">
+                <dateIssued encoding="w3cdtf" keyDate="yes">
+                    <!-- Define array of months -->
+                    <xsl:variable name="months"
+                        select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
+                    <!-- Define regex to match input date format -->
+                    <xsl:analyze-string select="$input"
+                        regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
+                        <xsl:matching-substring>
+                            <xsl:number value="regex-group(3)" format="0001"/>
+                            <xsl:text>-</xsl:text>
+                            <xsl:number value="index-of($months, regex-group(2))" format="01"/>
+                            <xsl:text>-</xsl:text>
+                            <xsl:number value="regex-group(1)" format="01"/>
+                        </xsl:matching-substring>
+                    </xsl:analyze-string>
+                </dateIssued>
+            </xsl:when>
+                <xsl:otherwise>
+                <dateIssued>
+                    <xsl:text>01-01-</xsl:text>
+                    <xsl:value-of select="./string[@key = 'product_year']"/>
+                </dateIssued>
+                </xsl:otherwise>
+            </xsl:choose>
         </originInfo>
     </xsl:template>
 
-    <!-- abstract -->
+     <!-- abstract -->
     <xd:doc>
         <xd:desc/>
     </xd:doc>
@@ -685,9 +711,7 @@
                                         <xsl:value-of select="$lastNumber"/>
                                     </end>
                                     <total>
-                                        <xsl:value-of
-                                            select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
-                                        />
+                                        <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                                     </total>
                                 </xsl:when>
                                 <xsl:when test="matches($citation, '(\d+\sp)')">
@@ -702,7 +726,6 @@
                             </xsl:choose>
                         </xsl:if>
                     </xsl:non-matching-substring>
-
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:when test="/map/string[@key = 'citation']">
@@ -711,7 +734,6 @@
                     <xsl:matching-substring>
                         <xsl:choose>
                             <xsl:when test="regex-group(1) and not(regex-group(2))">
-                                <xsl:comment>subtest 3.b.i</xsl:comment>
                                 <total>
                                     <xsl:value-of select="regex-group(1)"/>
                                 </total>
@@ -731,7 +753,6 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:if test="regex-group(5)">
-                                    <xsl:comment>subtest 3.b.ii</xsl:comment>
                                     <start>
                                         <xsl:value-of select="substring-before(regex-group(5), '-')"
                                         />
@@ -800,9 +821,6 @@
                     <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                 </total>
             </xsl:when>
-            <!--  <xsl:otherwise>
-               <xsl:call-template name="start_end_total"/>
-           </xsl:otherwise>-->
         </xsl:choose>
     </xsl:template>
 
@@ -820,7 +838,6 @@
             select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>
         <xsl:choose>
             <xsl:when test="matches($citation, '(\d+-\d+)')">
-                <xsl:comment>subtest3.2</xsl:comment>
                 <start>
                     <xsl:value-of select="$secondToLastNumber"/>
                 </start>
@@ -832,7 +849,6 @@
                 </total>
             </xsl:when>
             <xsl:when test="matches($citation, '(\d+\sp)')">
-                <xsl:comment>subtest 2c</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
@@ -910,7 +926,7 @@
                     </start>
                     <end>
                         <xsl:value-of select="$lastNumber"/>
-                        <!--xsl:value-of select="replace(.,concat('^(.*)',$number[last()],'.*'),'$1')"/>-->
+                       
                     </end>
                     <total>
                         <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
@@ -919,7 +935,6 @@
                 </xsl:if>
             </xsl:when>
             <xsl:when test="matches($citation, '[^\d+](\d+\sp)')">
-                <xsl:comment>subtest 3.b.iv</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
@@ -1030,15 +1045,15 @@
     <xd:doc scope="component">
         <xd:desc>
             <xd:p><xd:b>vendorName</xd:b>Metadata supplier name (e.g., Brill, Springer,Elsevier)</xd:p>
-            <xd:p><xd:b>filename_ext</xd:b>Filename from source metadata (eg. filename.xml,filename.json or filename.zip)</xd:p>
-            <xd:p><xd:b>filename</xd:b>filename w/o the extension (i.e., xml, json or zip)</xd:p>
+            <xd:p><xd:b>arhiveFile</xd:b>Filename from source metadata (eg. filename.xml,filename.json or filename.zip)</xd:p>
+            <xd:p><xd:b>originalFilename</xd:b>filename w/o the extension (i.e., xml, json or zip)</xd:p>
             <xd:p><xd:b>workingDir</xd:b>Directory the source file is transformed</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:template name="extension" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <extension>
             <vendorName>
-                <xsl:value-of select="$vendorName"/>
+                <xsl:text>United States. Forest Service</xsl:text>
             </vendorName>
             <archiveFile>
                 <xsl:value-of select="$archiveFile"/>

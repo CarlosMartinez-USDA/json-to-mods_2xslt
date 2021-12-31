@@ -96,18 +96,18 @@
             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
                 href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
-                <xsl:value-of disable-output-escaping="yes" select="."/>
+                <xsl:value-of disable-output-escaping="yes" select="local:escape-for-regex(.)"/>
             </xsl:result-document>
         </data>
-
-        <mods version="3.7" xmlns="http://www.loc.gov/mods/v3">
+        <xsl:result-document indent="yes" encoding="UTF-8" method="xml" 
+            href="file:///{$workingDir}N-{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json">
+        <mods version="3.7">
             <xsl:attribute name="{'xmlns'}">http://www.loc.gov/mods/v3</xsl:attribute>
             <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
-            <xsl:attribute name="xsi:schemaLocation">http://www.loc.gov/mods/v3
-                http://www.loc.gov/standards/mods/v3/mods-3-7.xsd</xsl:attribute>
+            <xsl:attribute name="xsi:schemaLocation" select="normalize-space('http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd')"/>
             <xsl:apply-templates select="json-to-xml(.)"/>
         </mods>
-
+        </xsl:result-document>
     </xsl:template>
 
     <xd:doc>
@@ -146,9 +146,6 @@
 
         <!--abstract-->
         <xsl:apply-templates select="./string[@key = 'abstract']"/>
-
-        <!--citation-->
-        <xsl:apply-templates select="map/string[@key = 'citation']"/>
 
         <!--subject/topic-->
         <xsl:call-template name="keywords"/>
@@ -685,9 +682,7 @@
                                         <xsl:value-of select="$lastNumber"/>
                                     </end>
                                     <total>
-                                        <xsl:value-of
-                                            select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
-                                        />
+                                        <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                                     </total>
                                 </xsl:when>
                                 <xsl:when test="matches($citation, '(\d+\sp)')">
@@ -702,7 +697,6 @@
                             </xsl:choose>
                         </xsl:if>
                     </xsl:non-matching-substring>
-
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:when test="/map/string[@key = 'citation']">
@@ -711,7 +705,6 @@
                     <xsl:matching-substring>
                         <xsl:choose>
                             <xsl:when test="regex-group(1) and not(regex-group(2))">
-                                <xsl:comment>subtest 3.b.i</xsl:comment>
                                 <total>
                                     <xsl:value-of select="regex-group(1)"/>
                                 </total>
@@ -731,7 +724,6 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:if test="regex-group(5)">
-                                    <xsl:comment>subtest 3.b.ii</xsl:comment>
                                     <start>
                                         <xsl:value-of select="substring-before(regex-group(5), '-')"
                                         />
@@ -800,9 +792,6 @@
                     <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
                 </total>
             </xsl:when>
-            <!--  <xsl:otherwise>
-               <xsl:call-template name="start_end_total"/>
-           </xsl:otherwise>-->
         </xsl:choose>
     </xsl:template>
 
@@ -820,7 +809,6 @@
             select="string(tokenize(/fn:map/fn:string[@key = 'citation'], '[^\d]+')[.][last() - 1])"/>
         <xsl:choose>
             <xsl:when test="matches($citation, '(\d+-\d+)')">
-                <xsl:comment>subtest3.2</xsl:comment>
                 <start>
                     <xsl:value-of select="$secondToLastNumber"/>
                 </start>
@@ -832,7 +820,6 @@
                 </total>
             </xsl:when>
             <xsl:when test="matches($citation, '(\d+\sp)')">
-                <xsl:comment>subtest 2c</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
@@ -910,7 +897,7 @@
                     </start>
                     <end>
                         <xsl:value-of select="$lastNumber"/>
-                        <!--xsl:value-of select="replace(.,concat('^(.*)',$number[last()],'.*'),'$1')"/>-->
+                       
                     </end>
                     <total>
                         <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
@@ -919,7 +906,6 @@
                 </xsl:if>
             </xsl:when>
             <xsl:when test="matches($citation, '[^\d+](\d+\sp)')">
-                <xsl:comment>subtest 3.b.iv</xsl:comment>
                 <total>
                     <xsl:value-of select="$lastNumber"/>
                 </total>
@@ -1030,8 +1016,8 @@
     <xd:doc scope="component">
         <xd:desc>
             <xd:p><xd:b>vendorName</xd:b>Metadata supplier name (e.g., Brill, Springer,Elsevier)</xd:p>
-            <xd:p><xd:b>filename_ext</xd:b>Filename from source metadata (eg. filename.xml,filename.json or filename.zip)</xd:p>
-            <xd:p><xd:b>filename</xd:b>filename w/o the extension (i.e., xml, json or zip)</xd:p>
+            <xd:p><xd:b>arhiveFile</xd:b>Filename from source metadata (eg. filename.xml,filename.json or filename.zip)</xd:p>
+            <xd:p><xd:b>originalFilename</xd:b>filename w/o the extension (i.e., xml, json or zip)</xd:p>
             <xd:p><xd:b>workingDir</xd:b>Directory the source file is transformed</xd:p>
         </xd:desc>
     </xd:doc>

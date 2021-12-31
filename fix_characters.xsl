@@ -30,6 +30,8 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="comment()"/>
+    
     <xsl:template match="text()" priority="3">
         <xsl:variable name="work" select="."/>                               <!-- HEX DUMP       -->
         

@@ -1087,7 +1087,7 @@
             <vendorName>
              <xsl:text>United States. Forest Service</xsl:text>
             </vendorName>
-            <archiveFile>
+           <!-- <archiveFile>
                 <xsl:value-of select="$archiveFile"/>
             </archiveFile>
             <originalFile>
@@ -1096,7 +1096,7 @@
             <workingDirectory>
                 <xsl:value-of select="$workingDir"/>
             </workingDirectory>
-            <xsl:comment>values of new global variables</xsl:comment>
+            <xsl:comment>values of new global variables</xsl:comment> -->
             <xslt_document>
                     <xsl:value-of select="document-uri(document(''))"/>
             </xslt_document>
