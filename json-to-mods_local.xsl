@@ -2,9 +2,10 @@
 <!DOCTYPE transform [
           <!ENTITY % predefined PUBLIC
          "-//W3C//ENTITIES Predefined XML//EN///XML"
-         "https://www.w3.org/2003/entities/2007/predefined.ent"
+         "http://www.w3.org/2003/entities/2007/predefined.ent"
        >
        %predefined;
+
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
     xmlns:mods="http://www.loc.gov/mods/v3" xmlns:f="http://functions"
@@ -101,7 +102,7 @@
             href="file:///{$workingDir}N-{replace($originalFilename, '(.*/)(.*)(\.json)','$2')}_{position()}.xml">
         <mods version="3.7">
             <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
-            <xsl:attribute name="xsi:schemaLocation">http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd</xsl:attribute>
+            <xsl:attribute name="xsi:schemaLocation">http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd</xs1288994579l:attribute>
                 <xsl:apply-templates select="json-to-xml(.)"/>
             </mods>
         </xsl:result-document>
