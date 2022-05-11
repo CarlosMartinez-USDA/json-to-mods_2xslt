@@ -96,7 +96,7 @@
             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
                 href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
-                <xsl:value-of disable-output-escaping="yes" select="local:escape-for-regex(.)"/>
+                <xsl:value-of select="."/>
             </xsl:result-document>
         </data>
         <xsl:result-document indent="yes" encoding="UTF-8" method="xml" 
@@ -133,7 +133,8 @@
         <genre>article</genre>
 
         <!--originInfo/dateIssued-->
-        <xsl:apply-templates select="./string[@key = 'modified_on']" mode="origin"/>
+<!--        <xsl:call-template name="dateIssued"/>-->
+        <xsl:apply-templates select="map/string[@key = 'modified_on'] | map/string[@key = 'created_on']" mode="origin"/>
 
         <!-- note-->
         <xsl:apply-templates select="./string[@key = 'status_name']"/>
@@ -283,17 +284,17 @@
         </role>
     </xsl:template>
 
-    <!-- originInfo -->
+    <!-- dateIssued -->
     <xd:doc>
-        <xd:desc>Transforms, in order of preference, the publication-related date metadata</xd:desc>
+        <xd:desc><xd:p>Chooses dateIssued mods element from one of three dates</xd:p></xd:desc>
     </xd:doc>
     <xsl:template name="dateIssued" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <xsl:choose>
-            <xsl:when test="map/string[@key = 'modified_on']">
-                <xsl:apply-templates select="map/string[@key = 'modified_on']"/>
+            <xsl:when test="map/string[@key = 'modified_on'] and . != 'null'">
+                <xsl:apply-templates select="map/string[@key = 'modified_on']" mode="origin"/>
             </xsl:when>
             <xsl:when test="map/string[@key = 'created_on']">
-                <xsl:apply-templates select="map/string[@key = 'created_on']"/>
+                <xsl:apply-templates select="map/string[@key = 'created_on']" mode="origin"/>
             </xsl:when>
             <xsl:otherwise>
                 <originInfo>
@@ -305,7 +306,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <!-- dateIssued -->
+    
     <xd:doc>
         <xd:desc/>
         <xd:param name="input"/>
@@ -314,6 +315,8 @@
         xpath-default-namespace="http://www.w3.org/2005/xpath-functions" mode="origin">
         <xsl:param name="input" select="."/>
         <originInfo>
+            <xsl:choose>
+            <xsl:when test="map/string[@key='modified_on'] and (. !='null' or '')">
             <dateIssued encoding="w3cdtf" keyDate="yes">
                 <!-- Define array of months -->
                 <xsl:variable name="months"
@@ -330,10 +333,36 @@
                     </xsl:matching-substring>
                 </xsl:analyze-string>
             </dateIssued>
+            </xsl:when>
+                <xsl:when test="map/string[@key='created_on'] and (. !='null' or '')">
+                <dateIssued encoding="w3cdtf" keyDate="yes">
+                    <!-- Define array of months -->
+                    <xsl:variable name="months"
+                        select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
+                    <!-- Define regex to match input date format -->
+                    <xsl:analyze-string select="$input"
+                        regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
+                        <xsl:matching-substring>
+                            <xsl:number value="regex-group(3)" format="0001"/>
+                            <xsl:text>-</xsl:text>
+                            <xsl:number value="index-of($months, regex-group(2))" format="01"/>
+                            <xsl:text>-</xsl:text>
+                            <xsl:number value="regex-group(1)" format="01"/>
+                        </xsl:matching-substring>
+                    </xsl:analyze-string>
+                </dateIssued>
+            </xsl:when>
+                <xsl:otherwise>
+                <dateIssued>
+                    <xsl:text>01-01-</xsl:text>
+                    <xsl:value-of select="./string[@key = 'product_year']"/>
+                </dateIssued>
+                </xsl:otherwise>
+            </xsl:choose>
         </originInfo>
     </xsl:template>
 
-    <!-- abstract -->
+     <!-- abstract -->
     <xd:doc>
         <xd:desc/>
     </xd:doc>
@@ -1024,7 +1053,7 @@
     <xsl:template name="extension" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <extension>
             <vendorName>
-                <xsl:value-of select="$vendorName"/>
+                <xsl:text>United States. Forest Service</xsl:text>
             </vendorName>
             <archiveFile>
                 <xsl:value-of select="$archiveFile"/>

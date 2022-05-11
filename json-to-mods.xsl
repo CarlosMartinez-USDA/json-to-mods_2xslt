@@ -96,7 +96,7 @@
             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
                 href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
-                <xsl:value-of disable-output-escaping="yes" select="."/>
+                <xsl:value-of select="."/>
             </xsl:result-document>
         </data>
         <xsl:result-document indent="yes" encoding="UTF-8" method="xml" 
@@ -553,6 +553,7 @@
     <!-- pages -->
     <xd:doc>
         <xd:desc>
+            
             <xd:p>Matches "pub_page_start" and "pub_page_end" stiing key values</xd:p>
             <xd:p>If not, looks for a hyphenated value within the "pub_page" field, and performs the
                 math</xd:p>
