@@ -30,9 +30,9 @@ The _[json_to_mods.xsl](https://github.com/CarlosMtz3/json-to-xml/blob/master/js
 	-  (a) [merge_json.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/working-directory/merge-json.sh) - merges all *.json files within this directory. This is useful for creating  a merged view of the json data for analysis. **Run this file first**
 	-  (b) [merge_xml.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/working-directory/merge-xml.sh) - merges all *.xml files contained within this directory. This is useful after transformation because it is easier to check if a specific element is available in every file.  **Run this file last**
 	 - \(c\) [correct-invalid-chars.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/workingDir/correct-invalid-chars.sh) - this corrects several of the invalid characters found in the original treesearch metadata. It should  be run after **(a)** and before **(b)**. 
-4.  **Run the merge_json.sh**
+4.  **Run the [merge_json.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/working-directory/merge-json.sh)**
 	-	 If data analysis is desired, the generated output from this file may be imported into OpenRefine. 
-5.  **Run the data_amp_add.sh** 
+5.  **Run the [correct-invalid-chars.sh](https://github.com/CarlosMtz3/json-to-mods/blob/master/workingDir/correct-invalid-chars.sh)** 
 	 - corrects all invalid character usage except for the misuse of the less than symbol (i.e. "<") in  the abstract of file [A-27260.json](https://github.com/CarlosMtz3/json-to-mods/blob/master/workingDir/A-29760.json). 
 6. **The files are now prepared for transformation.**
 	
