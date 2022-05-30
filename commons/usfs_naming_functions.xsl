@@ -33,9 +33,7 @@
         'General Technical Report - Proceedings', 'Information Forestry', 'Proceeding (Rocky Mountain Research Station Publications)',
         'Resource Bulletin (RB)', 'Research Map (RMAP)', 'Research Note (RN)', 'Research Paper (RP)', 'Resource Update (RU)')"/>
     
-    <xsl:variable name="tree_nodes">
-        <xsl:copy-of select="document('./usfs_treesearch.xml')"/>
-    </xsl:variable>  
+    <xsl:variable name="tree_nodes" select="document('./usfs_treesearch.xml')"/>
     
 
     <!--USFS Station, Research Unit, and Publication naming functions-->
@@ -96,6 +94,36 @@
         <xsl:if test="$unitAcronym != ''"/>
         <xsl:sequence select="$tree_nodes/usfs:treesearch/usfs:researchStations/usfs:station/usfs:researchUnits/usfs:researchUnit[usfs:unitAcronym= $unitAcronym]/usfs:unitName"/>
         
+    </xsl:function>
+    
+    <xd:doc scope="component">
+        <xd:desc>
+            <xd:p><xd:b>Function: </xd:b>usfs:unitNumberToName</xd:p>
+            <xd:p><xd:b>Usage: </xd:b>usfs:unitNumberoName(string[@key = 'unit_id'])</xd:p>
+            <xd:p><xd:b>Purpose: </xd:b>matches unit_id to the full name</xd:p>
+        </xd:desc>
+        <xd:param name="unitNum">four-digit number code to match against the four-digit unit number found in usfs_treesearch.xml file</xd:param>
+    </xd:doc>
+    <xsl:function name="local:unitNumberToAddress" as="xs:integer" xmlns:local="http://local_functions">
+        <xsl:param name="unitNum"/>
+        <xsl:if test="($unitNum!= '')"/> 
+        <xsl:sequence select="$tree_nodes/usfs:treesearch/usfs:researchStations/usfs:station/usfs:researchUnits/usfs:researchUnit[usfs:unitNumber = $unitNum]/usfs:unitAddress"
+        />
+    </xsl:function>
+    
+    <xd:doc scope="component">
+        <xd:desc>
+            <xd:p><xd:b>Function: </xd:b>usfs:unitNumberToAddress</xd:p>
+            <xd:p><xd:b>Usage: </xd:b>usfs:unitNumberoName(string[@key = 'unit_id'])</xd:p>
+            <xd:p><xd:b>Purpose: </xd:b>matches unit_id to the full name</xd:p>
+        </xd:desc>
+        <xd:param name="unitAcronym">four-digit number code to match against the four-digit unit number found in usfs_treesearch.xml file</xd:param>
+    </xd:doc>
+    <xsl:function name="local:unitAcronymToAddress" as="xs:string?" xmlns:local="http://local_functions">
+        <xsl:param name="unitAcronym"/>
+        <xsl:if test="($unitAcronym != '')"/> 
+        <xsl:sequence select="$tree_nodes/usfs:treesearch/usfs:researchStations/usfs:station/usfs:researchUnits/usfs:researchUnit[usfs:unitAcronym = $unitAcronym]/usfs:unitAddress"
+        />
     </xsl:function>
     
     

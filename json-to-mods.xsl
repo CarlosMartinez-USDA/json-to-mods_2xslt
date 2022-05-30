@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE transform [
-          <!ENTITY % predefined PUBLIC
-         "-//W3C//ENTITIES Predefined XML//EN///XML"
-         "https://www.w3.org/2003/entities/2007/predefined.ent"
-       >
-       %predefined;
-]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
-    xmlns:mods="http://www.loc.gov/mods/v3" xmlns:f="http://functions"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns="http://www.loc.gov/mods/v3" xmlns:mods="http://www.loc.gov/mods/v3"
+    xmlns:f="http://functions" xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:local="http://local_functions"
     xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
@@ -16,8 +9,8 @@
     exclude-result-prefixes="f fn math mods saxon local usfs xd xs xsi">
 
     <!--output-->
-    <xsl:output method="json" indent="yes" encoding="UTF-8" name="archive"/>
-    <xsl:output method="xml" indent="yes" encoding="UTF-8" saxon:next-in-chain="fix_characters.xsl"/>
+    <xsl:output method="json" indent="yes" encoding="UTF-8"  omit-xml-declaration="yes" name="archive"/>
+    <xsl:output method="xml" indent="yes" encoding="UTF-8" saxon:next-in-chain="fix_characters.xsl"/><!-- name="original"/>--> 
 
     <!--includes-->
     <xsl:include href="commons/common.xsl"/>
@@ -67,12 +60,12 @@
     <xsl:template match="data">
         <data>
             <xsl:result-document method="xml" omit-xml-declaration="yes"
-                href="{$working_dir}/archive-files/A-{$original_filename}_{position()}.json" format="archive">
+                href="{$working_dir}A-{$original_filename}_{position()}.json" format="archive">
                 <xsl:value-of disable-output-escaping="yes" select="."/>
             </xsl:result-document>
         </data>
         <xsl:result-document method="xml" indent="yes" encoding="UTF-8" media-type="text/xml"
-            format="original" href="{$working_dir}/mods-files/N-{$original_filename}_{position()}.xml">
+            format="original" href="{$working_dir}N-{$original_filename}_{position()}.xml">
             <mods version="3.7">
                 <xsl:attribute name="{'xmlns'}">http://www.loc.gov/mods/v3</xsl:attribute>
                 <xsl:namespace name="xlink">http://www.w3.org/1999/xlink</xsl:namespace>
@@ -85,7 +78,7 @@
     </xsl:template>-->
 
 
-    <xd:doc>
+    <!----><xd:doc>
         <xd:desc>
             <xd:p><xd:b>For Development and Production</xd:b>uncommment this template when testing
                 on the server or putting into production</xd:p>
@@ -94,19 +87,21 @@
     <xsl:template match="data">
         <data>
             <xsl:result-document omit-xml-declaration="yes" indent="yes" encoding="UTF-8"
-                href="file:///{$workingDir}{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
+                method="json"
+                href="file:///{$workingDir}/A-{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
-                <xsl:value-of disable-output-escaping="yes" select="."/>
+                <xsl:value-of select="."/>
+                
             </xsl:result-document>
         </data>
-        <xsl:result-document indent="yes" encoding="UTF-8" method="xml" 
-            href="file:///{$workingDir}N-{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json">
-        <mods version="3.7">
-            <xsl:attribute name="{'xmlns'}">http://www.loc.gov/mods/v3</xsl:attribute>
-            <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
-            <xsl:attribute name="xsi:schemaLocation" select="normalize-space('http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd')"/>
-            <xsl:apply-templates select="json-to-xml(.)"/>
-        </mods>
+        <xsl:result-document indent="yes" encoding="UTF-8" method="xml"
+            href="file:///{$workingDir}/N-{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.xml">
+            <mods version="3.7">
+                <xsl:namespace name="xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:namespace>
+                <xsl:attribute name="xsi:schemaLocation"
+                    select="normalize-space('http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd')"/>
+                <xsl:apply-templates select="json-to-xml(.)"/>
+            </mods>
         </xsl:result-document>
     </xsl:template>
 
@@ -134,7 +129,7 @@
 
         <!--originInfo/dateIssued-->
 <!--        <xsl:call-template name="dateIssued"/>-->
-        <xsl:apply-templates select="map/string[@key = 'modified_on'] | map/string[@key = 'created_on']" mode="origin"/>
+                <xsl:apply-templates select="map/string[@key = 'modified_on'] | map/string[@key = 'created_on']" mode="origin"/>
 
         <!-- note-->
         <xsl:apply-templates select="./string[@key = 'status_name']"/>
@@ -264,18 +259,23 @@
                 <xsl:value-of select="local:acronymToName(./string[@key = 'station_id'])"/>
                 <xsl:text>, </xsl:text>
                 <xsl:choose>
-                    <xsl:when test="number(./string[@key = 'unit_id']) > 0">
+                    <xsl:when test="number(./string[@key = 'unit_id']) castable as xs:integer">
                         <xsl:value-of select="local:unitNumberToName(./string[@key = 'unit_id'])"/>
                         <xsl:text>, </xsl:text>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:if test="string(./string[@key = 'unit_id'] != '')">
-                            <xsl:value-of
-                                select="local:unitAcronymToName(./string[@key = 'unit_id'])"/>
-                            <xsl:text>, </xsl:text>
-                        </xsl:if>
-                    </xsl:otherwise>
+                    <xsl:when test="string(./string[@key = 'unit_id'] != '')">
+                        <xsl:value-of select="local:unitAcronymToName(./string[@key = 'unit_id'])"/>
+                        <xsl:text>, </xsl:text>
+                    </xsl:when>
                 </xsl:choose>
+                <!-- <xsl:when test="number(./string[@key = 'unit_id']) castable as xs:integer">
+                            <xsl:value-of select="local:unitNumberToAddress(./string[@key = 'unit_id'])"/>
+                            <xsl:text>, </xsl:text>
+                        </xsl:when>
+                            <xsl:when test="string(./string[@key = 'unit_id'] != '')">
+                                <xsl:value-of select="local:unitAcronymToAddress(./string[@key = 'unit_id'])"/>
+                                <xsl:text>, </xsl:text>
+                            </xsl:when>-->
                 <xsl:value-of select="local:acronymToAddress(./string[@key = 'station_id'])"/>
             </affiliation>
         </xsl:if>
@@ -286,27 +286,29 @@
 
     <!-- dateIssued -->
     <xd:doc>
-        <xd:desc><xd:p>Chooses dateIssued mods element from one of three dates</xd:p></xd:desc>
+        <xd:desc>
+            <xd:p>Chooses dateIssued mods element from one of three dates</xd:p>
+        </xd:desc>
     </xd:doc>
     <xsl:template name="dateIssued" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <xsl:choose>
-            <xsl:when test="map/string[@key = 'modified_on'] and . != 'null'">
-                <xsl:apply-templates select="map/string[@key = 'modified_on']" mode="origin"/>
+            <xsl:when test="./string[@key = 'modified_on'] and (. != 'null') or (. =! '')">
+                <xsl:apply-templates select="./string[@key = 'modified_on']" mode="origin"/>
             </xsl:when>
-            <xsl:when test="map/string[@key = 'created_on']">
-                <xsl:apply-templates select="map/string[@key = 'created_on']" mode="origin"/>
+            <xsl:when test="./string[@key = 'created_on']">
+                <xsl:apply-templates select="./string[@key = 'created_on']" mode="origin"/>
             </xsl:when>
             <xsl:otherwise>
                 <originInfo>
                     <dateIssued encoding="w3cdtf" keyDate="yes">
-                        <xsl:value-of select="map/string[@key = 'product_year']"/>
+                        <xsl:value-of select="./string[@key = 'product_year']"/>
                     </dateIssued>
                 </originInfo>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    
+
     <xd:doc>
         <xd:desc/>
         <xd:param name="input"/>
@@ -316,60 +318,60 @@
         <xsl:param name="input" select="."/>
         <originInfo>
             <xsl:choose>
-            <xsl:when test="map/string[@key='modified_on'] and (. !='null' or '')">
-            <dateIssued encoding="w3cdtf" keyDate="yes">
-                <!-- Define array of months -->
-                <xsl:variable name="months"
-                    select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
-                <!-- Define regex to match input date format -->
-                <xsl:analyze-string select="$input"
-                    regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
-                    <xsl:matching-substring>
-                        <xsl:number value="regex-group(3)" format="0001"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:number value="index-of($months, regex-group(2))" format="01"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:number value="regex-group(1)" format="01"/>
-                    </xsl:matching-substring>
-                </xsl:analyze-string>
-            </dateIssued>
-            </xsl:when>
-                <xsl:when test="map/string[@key='created_on'] and (. !='null' or '')">
-                <dateIssued encoding="w3cdtf" keyDate="yes">
-                    <!-- Define array of months -->
-                    <xsl:variable name="months"
-                        select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
-                    <!-- Define regex to match input date format -->
-                    <xsl:analyze-string select="$input"
-                        regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
-                        <xsl:matching-substring>
-                            <xsl:number value="regex-group(3)" format="0001"/>
-                            <xsl:text>-</xsl:text>
-                            <xsl:number value="index-of($months, regex-group(2))" format="01"/>
-                            <xsl:text>-</xsl:text>
-                            <xsl:number value="regex-group(1)" format="01"/>
-                        </xsl:matching-substring>
-                    </xsl:analyze-string>
-                </dateIssued>
-            </xsl:when>
+                <xsl:when test="map/string[@key = 'modified_on'] and (. != 'null') or (. =! '')">
+                    <dateIssued encoding="w3cdtf" keyDate="yes">
+                        <!-- Define array of months -->
+                        <xsl:variable name="months"
+                            select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
+                        <!-- Define regex to match input date format -->
+                        <xsl:analyze-string select="$input"
+                            regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
+                            <xsl:matching-substring>
+                                <xsl:number value="regex-group(3)" format="0001"/>
+                                <xsl:text>-</xsl:text>
+                                <xsl:number value="index-of($months, regex-group(2))" format="01"/>
+                                <xsl:text>-</xsl:text>
+                                <xsl:number value="regex-group(1)" format="01"/>
+                            </xsl:matching-substring>
+                        </xsl:analyze-string>
+                    </dateIssued>
+                </xsl:when>
+                <xsl:when test="map/string[@key = 'created_on'] and (. != 'null' or '')">
+                    <dateIssued encoding="w3cdtf" keyDate="yes">
+                        <!-- Define array of months -->
+                        <xsl:variable name="months"
+                            select="('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC')"/>
+                        <!-- Define regex to match input date format -->
+                        <xsl:analyze-string select="$input"
+                            regex="^([0-9]{{1,2}})\-([A-Z]{{3}})\-([0-9]{{4}})(.*)$">
+                            <xsl:matching-substring>
+                                <xsl:number value="regex-group(3)" format="0001"/>
+                                <xsl:text>-</xsl:text>
+                                <xsl:number value="index-of($months, regex-group(2))" format="01"/>
+                                <xsl:text>-</xsl:text>
+                                <xsl:number value="regex-group(1)" format="01"/>
+                            </xsl:matching-substring>
+                        </xsl:analyze-string>
+                    </dateIssued>
+                </xsl:when>
                 <xsl:otherwise>
-                <dateIssued>
-                    <xsl:text>01-01-</xsl:text>
-                    <xsl:value-of select="./string[@key = 'product_year']"/>
-                </dateIssued>
+                    <dateIssued>
+                        <xsl:text>01-01-</xsl:text>
+                        <xsl:value-of select="./string[@key = 'product_year']"/>
+                    </dateIssued>
                 </xsl:otherwise>
             </xsl:choose>
         </originInfo>
     </xsl:template>
 
-     <!-- abstract -->
+    <!-- abstract -->
     <xd:doc>
         <xd:desc/>
     </xd:doc>
     <xsl:template match="map/string[@key = 'abstract']"
         xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <abstract>
-            <xsl:value-of select="normalize-space(.)"/>
+            <xsl:value-of select="."/>
         </abstract>
     </xsl:template>
 
@@ -440,7 +442,7 @@
         xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <xsl:for-each select="tokenize(., ',\s+')">
             <subject>
-                <topic>
+                <topic>              
                     <xsl:value-of select="subsequence(tokenize(., ',\s+'), 1, last())"/>
                 </topic>
             </subject>
@@ -468,8 +470,7 @@
     <xsl:template name="relatedItem"
         xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <xsl:param name="p_series">
-            <xsl:value-of
-                select="('Forest Insect &amp; Disease Leaflet',
+            <xsl:value-of select="('Forest Insect &amp; Disease Leaflet',
                 'General Technical Report (GTR)',
                 'General Technical Report - Proceedings',
                 'Information Forestry',
@@ -478,8 +479,7 @@
                 'Research Map (RMAP)',
                 'Research Note (RN)',
                 'Research Paper (RP)',
-                'Resource Update (RU)')"
-            />
+                'Resource Update (RU)')"/>
         </xsl:param>
         <xsl:variable name="pub_desc_type" select="./string[@key = 'pub_type_desc']"/>
         <xsl:variable name="citation" select="./string[@key = 'citation']"/>
@@ -711,7 +711,9 @@
                                         <xsl:value-of select="$lastNumber"/>
                                     </end>
                                     <total>
-                                        <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"/>
+                                        <xsl:value-of
+                                            select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
+                                        />
                                     </total>
                                 </xsl:when>
                                 <xsl:when test="matches($citation, '(\d+\sp)')">
@@ -926,7 +928,7 @@
                     </start>
                     <end>
                         <xsl:value-of select="$lastNumber"/>
-                       
+
                     </end>
                     <total>
                         <xsl:value-of select="f:calculateTotalPgs($secondToLastNumber, $lastNumber)"
@@ -994,7 +996,8 @@
             </xd:ul>
         </xd:desc>
     </xd:doc>
-    <xsl:template name="identifiers" xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
+    <xsl:template name="identifiers"
+        xpath-default-namespace="http://www.w3.org/2005/xpath-functions">
         <!--doi-->
         <xsl:if test="/map/string[@key = 'doi']">
             <identifier type="doi">
@@ -1044,9 +1047,12 @@
 
     <xd:doc scope="component">
         <xd:desc>
-            <xd:p><xd:b>vendorName</xd:b>Metadata supplier name (e.g., Brill, Springer,Elsevier)</xd:p>
-            <xd:p><xd:b>arhiveFile</xd:b>Filename from source metadata (eg. filename.xml,filename.json or filename.zip)</xd:p>
-            <xd:p><xd:b>originalFilename</xd:b>filename w/o the extension (i.e., xml, json or zip)</xd:p>
+            <xd:p><xd:b>vendorName</xd:b>Metadata supplier name (e.g., Brill,
+                Springer,Elsevier)</xd:p>
+            <xd:p><xd:b>arhiveFile</xd:b>Filename from source metadata (eg.
+                filename.xml,filename.json or filename.zip)</xd:p>
+            <xd:p><xd:b>originalFilename</xd:b>filename w/o the extension (i.e., xml, json or
+                zip)</xd:p>
             <xd:p><xd:b>workingDir</xd:b>Directory the source file is transformed</xd:p>
         </xd:desc>
     </xd:doc>
@@ -1064,6 +1070,9 @@
             <workingDirectory>
                 <xsl:value-of select="$workingDir"/>
             </workingDirectory>
+            <stylesheet>
+                <xsl:value-of select="document-uri(document(''))"/>
+            </stylesheet>
         </extension>
     </xsl:template>
 </xsl:stylesheet>

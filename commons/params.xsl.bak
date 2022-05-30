@@ -19,5 +19,6 @@
     <xsl:param name="vendorName"/>
     <xsl:param name="archiveFile"/>
     <xsl:param name="originalFilename" select="saxon:system-id()"/>
+    <!--    <xsl:param name="   workingDir"/>-->
     <xsl:param name="workingDir" select="substring-before(base-uri(), replace(base-uri(), '(.*/)(.*)(\.xml|\.json)', '$2'))"/>
 </xsl:stylesheet>

@@ -1,5 +1,4 @@
 <data>
-<data>
 {
     "product_id": "905",
     "ac22_approved_for_public": "1",
@@ -14,10 +13,10 @@
     "status_name": "Informally Refereed (Peer-Reviewed)",
     "pub_type_id": "8",
     "pub_type_desc": "Research Note (RN)",
-    "title": "Volume of logging residues in Oregon, Washington, and California&#151;initial results from a 1969-70 study.",
+    "title": "Volume of logging residues in Oregon, Washington, and California&amp;151;initial results from a 1969-70 study.",
     "product_year": " 1971",
     "abstract": "A study conducted during 1969-70 in Oregon, Washington, and California indicates that the average net volume of logging residues ranged from 325 to 3,156 cubic feet per acre. The highest volume was on National Forests in the Douglas-fir region, which averaged 2.5 times greater than private lands. The lowest volumes of residue were found in the ponderosa pine region where both private and public lands averaged between 325 and 375 cubic feet per acre. Private lands in California averaged 1,558 cubic feet per acre, while National Forests averaged 1,206 cubic feet per acre. The total net volume of logging residues for all regions was 908 million cubic feet, about 26 percent of the reported 1969 log harvest. In the Douglas-fir region total net volume was 465 million cubic feet, which amounted to 50 percent of the wood consumption by the pulp and board industries in western Oregon and western Washington for 1961.",
-    "citation": "Howard, James O. 1971. Volume of logging residues in Oregon, Washington, and California&#151;initial results from a 1969-70 study.  Res. Note PNW-RN-163. Portland, OR: U.S. Department of Agriculture, Forest Service, Pacific Northwest Research Station. 8 p",
+    "citation": "Howard, James O. 1971. Volume of logging residues in Oregon, Washington, and California&amp;151;initial results from a 1969-70 study.  Res. Note PNW-RN-163. Portland, OR: U.S. Department of Agriculture, Forest Service, Pacific Northwest Research Station. 8 p",
     "keywords": "logging slash, wood waste, waste utilization",
     "doi": null,
     "url_binary_file": "https://www.fs.fed.us/pnw/pubs/pnw_rn163.pdf",
@@ -47,7 +46,7 @@
     "national_research_taxonomy_elements": [
         {
             "nrt_id": "27",
-            "nrt_title": "Ecology, Ecosystems, & Environment"
+            "nrt_title": "Ecology, Ecosystems, &amp;Environment"
         },
         {
             "nrt_id": "36",
@@ -92,4 +91,3 @@
     "usnatforests": "",
     "countystates": ""
 }</data>
-</data>

@@ -1,5 +1,4 @@
 <data>
-<data>
 {
     "product_id": "1697",
     "ac22_approved_for_public": "1",
@@ -17,7 +16,7 @@
     "title": "Surface characterization of weathered wood-plastic composites produced from modified wood flour",
     "product_year": " 2007",
     "abstract": "The effects of weathering on the surface properties of wood-plastic composites (WPC) were examined. High-density polyethylene (HDPE) based WPCs made from modified wood flour (untreated, extractives free, and holocellulose (delignified) fibers) were subjected to accelerated (xenon-arc) weathering. Colorimetry and Fourier-transform infrared spectroscopy were employed to monitor the color change and surface chemistries of the weathered WPC surface. The compositional change that occurred on the WPC surface was determined using pyrolysis GC-MS analysis. The study showed that longer exposure time caused higher oxidation, lower wood lignin and higher plastic content of the weathered WPC surface. From this study, the use of holocellulose fibers improved the weathering performance (color) of WPCs.",
-    "citation": "Fabiyi, James S.; McDonald, Armando G.; Stark, Nicole M. 2007. Surface characterization of weathered wood-plastic composites produced from modified wood flour. In: Stark, Nicole M., Ed. Proceedings of Ninth International Conference on wood & biofiber plastic composites. 2007 May 21-23;  Madison, WI.  Madison, WI: Forest Products Society: 7224: 271-275. ISBN 1892529505: 9781892529503.",
+    "citation": "Fabiyi, James S.; McDonald, Armando G.; Stark, Nicole M. 2007. Surface characterization of weathered wood-plastic composites produced from modified wood flour. In: Stark, Nicole M., Ed. Proceedings of Ninth International Conference on wood &amp;biofiber plastic composites. 2007 May 21-23;  Madison, WI.  Madison, WI: Forest Products Society: 7224: 271-275. ISBN 1892529505: 9781892529503.",
     "keywords": "Fourier transform infrared spectroscopy, colorimetry, accelerated life testing, composite materials, deterioration, wood plastic composites, wood flour, color fading, mechanical properties, polyethylene, weathering, pyrolysis, high density polyethylene, photodegradation, accelerated testing, discoloration, wood-plastic materials, surface properties",
     "doi": null,
     "url_binary_file": "https://www.fpl.fs.fed.us/documnts/pdf2007/fpl_2007_fabiyi001.pdf",
@@ -27,7 +26,7 @@
     "pub_parent_id": null,
     "pub_child_number": null,
     "pub_parent_ind": "0",
-    "pub_publication": "9th International Conference on Wood & Biofiber Plastic Composites : May 21-23, 2007 ... Madison, Wisconsin, USA.  Madison, Wis. : Forest Products Society, 2007: Pages 271-275",
+    "pub_publication": "9th International Conference on Wood &amp;Biofiber Plastic Composites : May 21-23, 2007 ... Madison, Wisconsin, USA.  Madison, Wis. : Forest Products Society, 2007: Pages 271-275",
     "proceedings_ind": "0",
     "pub_volume": null,
     "pub_issue": null,
@@ -123,4 +122,3 @@
     "usnatforests": "",
     "countystates": ""
 }</data>
-</data>
