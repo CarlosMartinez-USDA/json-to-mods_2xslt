@@ -35,7 +35,7 @@
 </xd:doc>
   
     <!--original params-->
-    <xsl:param name="vendorName"><xsl:text>United States. Forest service</xsl:text></xsl:param>
+    <xsl:param name="vendorName"/>
     <xsl:param name="archiveFile"/> 
     <xsl:param name="originalFilename" select="saxon:system-id()"/>
     <xsl:param name="workingDir"/>
