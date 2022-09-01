@@ -91,7 +91,6 @@
                 href="file:///{$workingDir}/A-{replace($originalFilename, '(.*/)(.*)(\.xml|\.json)','$2')}_{position()}.json"
                 format="archive">
                 <xsl:value-of select="."/>
-                
             </xsl:result-document>
         </data>
         <xsl:result-document indent="yes" encoding="UTF-8" method="xml"
@@ -128,7 +127,6 @@
         <genre>article</genre>
 
         <!--originInfo/dateIssued-->
-<!--        <xsl:call-template name="dateIssued"/>-->
                 <xsl:apply-templates select="map/string[@key = 'modified_on'] | map/string[@key = 'created_on']" mode="origin"/>
 
         <!-- note-->
@@ -308,7 +306,6 @@
         </xsl:choose>
     </xsl:template>
 
-
     <xd:doc>
         <xd:desc/>
         <xd:param name="input"/>
@@ -318,7 +315,7 @@
         <xsl:param name="input" select="."/>
         <originInfo>
             <xsl:choose>
-                <xsl:when test="map/string[@key = 'modified_on'] and (. != 'null') or (. =! '')">
+                <xsl:when test="map/string[@key = 'modified_on'] and . != '' or 'null'">
                     <dateIssued encoding="w3cdtf" keyDate="yes">
                         <!-- Define array of months -->
                         <xsl:variable name="months"
@@ -364,7 +361,7 @@
         </originInfo>
     </xsl:template>
 
-    <!-- abstract -->
+     <!-- abstract -->
     <xd:doc>
         <xd:desc/>
     </xd:doc>
