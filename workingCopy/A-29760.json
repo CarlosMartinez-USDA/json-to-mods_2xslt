@@ -1,5 +1,4 @@
 <data>
-<data>
 {
     "product_id": "1451",
     "ac22_approved_for_public": "1",
@@ -51,7 +50,7 @@
         },
         {
             "nrt_id": "82",
-            "nrt_title": "Pulp & paper"
+            "nrt_title": "Pulp &amp;paper"
         }
     ],
     "pub_authors": [
@@ -242,4 +241,3 @@
     "usnatforests": "",
     "countystates": ""
 }</data>
-</data>

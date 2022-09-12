@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      version="3.7"
       xmlns="http://www.loc.gov/mods/v3"
+      version="3.7"
       xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd">
    <titleInfo>
       <title>A method countries can use to estimate changes in carbon stored in harvested wood products and the uncertainty of such estimates</title>
@@ -34,9 +34,6 @@
    </name>
    <typeOfResource>text</typeOfResource>
    <genre>article</genre>
-   <originInfo>
-      <dateIssued encoding="w3cdtf" keyDate="yes">2019-09-24</dateIssued>
-   </originInfo>
    <note type="treesearch-status">Informally Refereed (Peer-Reviewed)</note>
    <language>
       <languageTerm type="code" authority="iso639-2b">eng</languageTerm>
@@ -85,9 +82,10 @@
       </program>
    </accessCondition>
    <extension>
-      <vendorName>United States. Forest service</vendorName>
-      <originalFile>file:/C:/Users/carlos.martinez/Downloads/Chrome-downloads/json-to-mods_2xslt-master/workingDir-12-15-2021/A-13977.json</originalFile>
-      <workingDirectory>C:/Users/carlos.martinez/Desktop/json-to-mods_2xslt/workingCopy/</workingDirectory>
-      <xslt_document>file:/C:/Users/carlos.martinez/Downloads/Chrome-downloads/json-to-mods_2xslt-master/xslt_for_server.xsl</xslt_document>
+      <vendorName>United States. Forest Service</vendorName>
+      <archiveFile>Test.zip</archiveFile>
+      <originalFile>file:/C:/Users/Carlos.Martinez/OneDrive%20-%20USDA/Desktop/json-to-mods_2xslt/workingCopy/A-13977.json</originalFile>
+      <workingDirectory>C:/Users/Carlos.Martinez/OneDrive%20-%20USDA/Desktop/json-to-mods_2xslt/workingCopy</workingDirectory>
+      <stylesheet>file:/C:/Users/Carlos.Martinez/OneDrive%20-%20USDA/Desktop/json-to-mods_2xslt/json-to-mods.xsl</stylesheet>
    </extension>
 </mods>

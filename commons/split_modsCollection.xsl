@@ -19,7 +19,7 @@
         </xd:desc>
     </xd:doc>
     
-    <xsl:template match="/" priority="5">
+    <xsl:template match="/" priority="0.5">
         <xsl:for-each select="modsCollection/mods">
             <xsl:result-document method="xml" encoding="UTF-8" indent="yes" href="{*:extension/*:workingDirectory}N-{replace(*:extension/*:originalFile, '(.*/)(.*)(\.xml)', '$2')}_{position()}.xml">
             <mods version="3.7">

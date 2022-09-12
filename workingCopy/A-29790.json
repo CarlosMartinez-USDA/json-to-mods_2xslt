@@ -1,5 +1,4 @@
 <data>
-<data>
 {
     "product_id": "1667",
     "ac22_approved_for_public": "1",
@@ -17,7 +16,7 @@
     "title": "Vision of the U.S. biofuel future: a case for hydrogen-enriched biomass gasification",
     "product_year": " 2007",
     "abstract": "Researchers at the Forest Product Laboratory (FPL) and the University of Wisconsin-Madison (UW) envision a future for biofuels based on biomass gasification with hydrogen enrichment. Synergisms between hydrogen production and biomass gasification technologies will be necessary to avoid being marginalized in the biofuel marketplace. Five feasible engineering solutions have been suggested for this synergism. We are researching one solution to investigate cleaner and more-efficient wood gasification via high-temperature liquid metal as a carrier fluid and making use of hydrogen, power, and waste heat from future nuclear reactors. The enrichment of syngas with nuclear, windmill, or solar hydrogen permits full conversion of all carbon from biomass to produce competitive synthetic gasoline, diesel, or other liquid hydrocarbon or alcohol fuels.",
-    "citation": "Dietenberger, Mark A.; Anderson, Mark. 2007. Vision of the U.S. biofuel future: a case for hydrogen-enriched biomass gasification.  Industrial & Engineering Chemistry Research 46(26): 8863-8874.",
+    "citation": "Dietenberger, Mark A.; Anderson, Mark. 2007. Vision of the U.S. biofuel future: a case for hydrogen-enriched biomass gasification.  Industrial &amp;Engineering Chemistry Research 46(26): 8863-8874.",
     "keywords": "Synthetic fuels, hydrogen as fuel, energy consumption, fuelwood, biomass gasification, biomass energy, wood waste as fuel, renewable energy sources, pyrolysis, alcohol, renewable energy resources, utilization, biomass fuel, wood as fuel",
     "doi": null,
     "url_binary_file": "https://www.fpl.fs.fed.us/documnts/pdf2007/fpl_2007_dietenberger001.pdf",
@@ -27,7 +26,7 @@
     "pub_parent_id": null,
     "pub_child_number": null,
     "pub_parent_ind": "0",
-    "pub_publication": "Industrial & engineering chemistry research.  Vol. 46, no. 26 (2007):  Pages: 8863-8874",
+    "pub_publication": "Industrial &amp;engineering chemistry research.  Vol. 46, no. 26 (2007):  Pages: 8863-8874",
     "proceedings_ind": "0",
     "pub_volume": null,
     "pub_issue": null,
@@ -106,4 +105,3 @@
     "usnatforests": "",
     "countystates": ""
 }</data>
-</data>
